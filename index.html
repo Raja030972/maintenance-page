@@ -1,30 +1,245 @@
-<div>
-    <div class="container">
-        <div class="row">
-            <div class="col-md-8">
-                <h1 class="err-pg-headng">Bienvenue à Votre Santé</h1>
-            </div>
-        </div>
-        <div class="row err-pg-subh-spc"></div>
-        <div class="row">
-            <div class="col-md-8 ment-pg-sub-h-txt">
-                <span class="err-pg-sub-head">Service temporairement indisponible </span>
-                <span class="err-pg-sub-head-p">Le portail Votre Santé est en cours de maintenance et sera de retour
-                    plus tard.</span>
-                <span class="err-pg-sub-head-p blw">En attendant, pour vos besoins de santé non urgents, appelez <strong>Info-Santé au 811</strong>, option 1 ou
-                    <strong>Info-Social au 811</strong>, option 2. En cas d’urgence, composez le <strong>911</strong>.</span>
-            </div>
-        </div>
-        <div class="row err-pg-btn-sec">
-            <div class="col-md-4" style="padding-left: 0px;">
-                <button class="err-pg-btn" onclick="window.open('https://www.quebec.ca/', '_blank');"> Aller sur
-                    Québec.ca</button>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8" />
+    <title>Votre Santé – Maintenance</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
 
+    <style>
+        /* Basic layout to mimic Bootstrap grid just for this page */
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 40px 20px;
+            font-family: "Open Sans", Arial, sans-serif;
+            background-color: #ffffff;
+            color: #223654;
+        }
+
+        .container {
+            max-width: 1080px;
+            margin: 0 auto;
+        }
+
+        .row {
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .col-md-8 {
+            flex: 0 0 66.666%;
+            max-width: 66.666%;
+        }
+
+        .col-md-4 {
+            flex: 0 0 33.333%;
+            max-width: 33.333%;
+        }
+
+        @media (max-width: 768px) {
+            .col-md-8,
+            .col-md-4 {
+                flex: 0 0 100%;
+                max-width: 100%;
+            }
+
+            body {
+                padding: 20px 10px;
+            }
+        }
+
+        /* ----------------- Error / Maintenance page styles (from vsconsolidated.css) ----------------- */
+
+        /* WT- section- Erro-page -- start */
+
+        .err-pg-headng {
+            padding-left: 10px;
+            /* You can add more if needed, e.g. font-size etc. */
+            font-size: 32px;
+            font-weight: 700;
+        }
+
+        .err-pg-subh-spc {
+            display: flex;
+            width: 1080px;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 40px;
+        }
+
+        .err-pg-sub-h-txt {
+            display: flex;
+            width: 658px;
+            min-height: 80px;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 5px;
+            margin-left: 10px;
+        }
+
+        .err-pg-sub-head {
+            min-height: 42px;
+            align-self: stretch;
+            color: #223654;
+            font-family: Roboto, "Open Sans", Arial, sans-serif;
+            font-size: 28px;
+            font-style: normal;
+            font-weight: 700;
+            line-height: 38px;
+        }
+
+        .err-pg-sub-head-p {
+            min-height: 32px;
+            flex-shrink: 0;
+            align-self: stretch;
+            color: #223654;
+            font-family: "Open Sans", Arial, sans-serif;
+            font-size: 16px;
+            font-style: normal;
+            font-weight: 400;
+            line-height: 24px;
+        }
+
+        .err-pg-btn-sec {
+            display: flex;
+            padding: 0 422px 62px 0;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 48.623px;
+            align-self: stretch;
+            margin-left: 10px;
+        }
+
+        .err-pg-btn {
+            max-width: 288px;
+            color: #FFFFFF;
+            text-align: center;
+            font-family: "Open Sans", Arial, sans-serif;
+            font-size: 16px;
+            font-style: normal;
+            font-weight: 700;
+            line-height: 24px;
+            padding: 16px 24px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            align-self: stretch;
+            border-radius: 4px;
+            border: 2px solid #095797;
+            background: #095797;
+            cursor: pointer;
+        }
+
+        .err-pg-btn:hover {
+            background: #156cb2;
+            border-color: #156cb2;
+        }
+
+        /* WT- section- Erro-page -- end */
+
+        /* WT- section- Maintenance-page -- start */
+
+        .blw {
+            padding-top: 10px;
+        }
+
+        .ment-pg-sub-h-txt {
+            display: flex;
+            height: 148px;
+            min-height: 80px;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 5px;
+            align-self: stretch;
+            width: 666px;
+            margin-left: 10px;
+        }
+
+        .ment-pg-disc-img-sec {
+            display: flex;
+            align-items: flex-end;
+            flex-direction: column;
+            margin-top: -40px;
+        }
+
+        /* Adjust spacing for smaller screens */
+        @media (max-width: 768px) {
+            .err-pg-subh-spc {
+                width: 100%;
+            }
+
+            .err-pg-sub-h-txt,
+            .ment-pg-sub-h-txt {
+                width: 100%;
+                margin-left: 0;
+                height: auto;
+            }
+
+            .err-pg-btn-sec {
+                padding: 20px 0 40px 0;
+            }
+
+            .ment-pg-disc-img-sec {
+                margin-top: 20px;
+                align-items: center;
+            }
+        }
+        /* WT- section- Maintenance-page -- end */
+    </style>
+</head>
+
+<body>
+    <!-- Consolidated Maintenance Page -->
+    <div>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8">
+                    <h1 class="err-pg-headng">Bienvenue à Votre Santé</h1>
+                </div>
             </div>
+
+            <div class="row err-pg-subh-spc"></div>
+
+            <div class="row">
+                <div class="col-md-8 ment-pg-sub-h-txt">
+                    <span class="err-pg-sub-head">Service temporairement indisponible</span>
+                    <span class="err-pg-sub-head-p">
+                        Le portail Votre Santé est en cours de maintenance et sera de retour plus tard.
+                    </span>
+                    <span class="err-pg-sub-head-p blw">
+                        En attendant, pour vos besoins de santé non urgents, appelez
+                        <strong>Info-Santé au 811</strong>, option 1 ou
+                        <strong>Info-Social au 811</strong>, option 2. En cas d’urgence, composez le
+                        <strong>911</strong>.
+                    </span>
+                </div>
+            </div>
+
+            <div class="row err-pg-btn-sec">
+                <div class="col-md-4" style="padding-left: 0;">
+                    <button class="err-pg-btn"
+                            onclick="window.open('https://www.quebec.ca/', '_blank');">
+                        Aller sur Québec.ca
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="ment-pg-disc-img-sec">
+            <!--
+              NOTE: Original src="/img-disconnect/" has been replaced with a
+              binary (base64) inline PNG placeholder. Replace with your real
+              base64 if you have the original image.
+            -->
+            <img
+                src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+X2DkAAAAASUVORK5CYII="
+                alt="image-disconnect" />
         </div>
     </div>
-    <div class="ment-pg-disc-img-sec">
-        <img src="/img-disconnect/" alt="image-disconnect">
-    </div>
-</div>
-
+</body>
+</html>
