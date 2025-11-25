@@ -1,245 +1,1270 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <title>Votre Santé – Maintenance</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agentic AI Workspace (Enhanced)</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Marked.js for Markdown Parsing -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    
+    <!-- Highlight.js for Code Syntax Highlighting -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/github-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+
+    <!-- Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    
+    <!-- JS PDF Library for PDF generation -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    
+    <!-- HTML2Canvas for rendering formatted HTML to PDF (NEW DEPENDENCY) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script> 
 
     <style>
-        /* Basic layout to mimic Bootstrap grid just for this page */
-        * {
-            box-sizing: border-box;
-        }
-
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap');
+        
         body {
-            margin: 0;
-            padding: 40px 20px;
-            font-family: "Open Sans", Arial, sans-serif;
-            background-color: #ffffff;
-            color: #223654;
+            font-family: 'Inter', sans-serif;
+            background-color: #343541; /* OpenAI Dark Grey */
+            color: #ECECF1;
         }
 
-        .container {
-            max-width: 1080px;
-            margin: 0 auto;
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
         }
-
-        .row {
-            display: flex;
-            flex-wrap: wrap;
+        ::-webkit-scrollbar-track {
+            background: #343541;
         }
-
-        .col-md-8 {
-            flex: 0 0 66.666%;
-            max-width: 66.666%;
-        }
-
-        .col-md-4 {
-            flex: 0 0 33.333%;
-            max-width: 33.333%;
-        }
-
-        @media (max-width: 768px) {
-            .col-md-8,
-            .col-md-4 {
-                flex: 0 0 100%;
-                max-width: 100%;
-            }
-
-            body {
-                padding: 20px 10px;
-            }
-        }
-
-        /* ----------------- Error / Maintenance page styles (from vsconsolidated.css) ----------------- */
-
-        /* WT- section- Erro-page -- start */
-
-        .err-pg-headng {
-            padding-left: 10px;
-            /* You can add more if needed, e.g. font-size etc. */
-            font-size: 32px;
-            font-weight: 700;
-        }
-
-        .err-pg-subh-spc {
-            display: flex;
-            width: 1080px;
-            flex-direction: column;
-            align-items: flex-start;
-            gap: 40px;
-        }
-
-        .err-pg-sub-h-txt {
-            display: flex;
-            width: 658px;
-            min-height: 80px;
-            flex-direction: column;
-            align-items: flex-start;
-            gap: 5px;
-            margin-left: 10px;
-        }
-
-        .err-pg-sub-head {
-            min-height: 42px;
-            align-self: stretch;
-            color: #223654;
-            font-family: Roboto, "Open Sans", Arial, sans-serif;
-            font-size: 28px;
-            font-style: normal;
-            font-weight: 700;
-            line-height: 38px;
-        }
-
-        .err-pg-sub-head-p {
-            min-height: 32px;
-            flex-shrink: 0;
-            align-self: stretch;
-            color: #223654;
-            font-family: "Open Sans", Arial, sans-serif;
-            font-size: 16px;
-            font-style: normal;
-            font-weight: 400;
-            line-height: 24px;
-        }
-
-        .err-pg-btn-sec {
-            display: flex;
-            padding: 0 422px 62px 0;
-            flex-direction: column;
-            align-items: flex-start;
-            gap: 48.623px;
-            align-self: stretch;
-            margin-left: 10px;
-        }
-
-        .err-pg-btn {
-            max-width: 288px;
-            color: #FFFFFF;
-            text-align: center;
-            font-family: "Open Sans", Arial, sans-serif;
-            font-size: 16px;
-            font-style: normal;
-            font-weight: 700;
-            line-height: 24px;
-            padding: 16px 24px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            gap: 8px;
-            align-self: stretch;
+        ::-webkit-scrollbar-thumb {
+            background: #565869;
             border-radius: 4px;
-            border: 2px solid #095797;
-            background: #095797;
-            cursor: pointer;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #acacbe;
         }
 
-        .err-pg-btn:hover {
-            background: #156cb2;
-            border-color: #156cb2;
+        /* Markdown Styles */
+        /* IMPORTANT: Make sure the prose container has a light background color 
+           when rendering to HTML/Canvas for PDF, otherwise it will print black text on black background. 
+           We will handle this override in the PDF function's temporary container. */
+        .prose pre {
+            background-color: #000 !important;
+            border-radius: 0.5rem;
+            margin-top: 1rem;
+            margin-bottom: 1rem;
+            position: relative;
+        }
+        .prose code {
+            color: #e2e8f0;
+            font-family: 'Menlo', 'Monaco', 'Courier New', monospace;
+        }
+        .prose p {
+            margin-bottom: 1rem;
+            line-height: 1.7;
+        }
+        .prose ul {
+            list-style-type: disc;
+            padding-left: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        .prose ol {
+            list-style-type: decimal;
+            padding-left: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        .prose h1, .prose h2, .prose h3 {
+            color: #fff;
+            font-weight: 600;
+            margin-top: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+        .prose a {
+            color: #10a37f;
+            text-decoration: underline;
+        }
+        
+        /* Loading Animation */
+        .typing-dot {
+            width: 6px;
+            height: 6px;
+            background-color: #9CA3AF;
+            border-radius: 50%;
+            animation: typing 1.4s infinite ease-in-out both;
+        }
+        .typing-dot:nth-child(1) { animation-delay: -0.32s; }
+        .typing-dot:nth-child(2) { animation-delay: -0.16s; }
+        
+        @keyframes typing {
+            0%, 80%, 100% { transform: scale(0); }
+            40% { transform: scale(1); }
         }
 
-        /* WT- section- Erro-page -- end */
-
-        /* WT- section- Maintenance-page -- start */
-
-        .blw {
-            padding-top: 10px;
+        .glass-panel {
+            background: rgba(52, 53, 65, 0.9);
+            backdrop-filter: blur(10px);
         }
 
-        .ment-pg-sub-h-txt {
-            display: flex;
-            height: 148px;
-            min-height: 80px;
-            flex-direction: column;
-            align-items: flex-start;
-            gap: 5px;
-            align-self: stretch;
-            width: 666px;
-            margin-left: 10px;
+        /* Modal Styles */
+        #settings-modal {
+            backdrop-filter: blur(5px);
+        }
+        
+        /* Message Actions/Download Button Hover */
+        .message-actions {
+            opacity: 0;
+            transition: opacity 0.2s ease-in-out;
+        }
+        .group:hover .message-actions {
+            opacity: 1;
         }
 
-        .ment-pg-disc-img-sec {
-            display: flex;
-            align-items: flex-end;
-            flex-direction: column;
-            margin-top: -40px;
+        /* Temporary PDF container styles for contrast */
+        .pdf-temp-container {
+            background-color: white !important;
+            color: black !important;
+            padding: 30px;
+            width: 794px; /* A4 width in pixels at 96 DPI */
         }
-
-        /* Adjust spacing for smaller screens */
-        @media (max-width: 768px) {
-            .err-pg-subh-spc {
-                width: 100%;
-            }
-
-            .err-pg-sub-h-txt,
-            .ment-pg-sub-h-txt {
-                width: 100%;
-                margin-left: 0;
-                height: auto;
-            }
-
-            .err-pg-btn-sec {
-                padding: 20px 0 40px 0;
-            }
-
-            .ment-pg-disc-img-sec {
-                margin-top: 20px;
-                align-items: center;
-            }
+        .pdf-temp-container .prose {
+             color: black !important;
         }
-        /* WT- section- Maintenance-page -- end */
+        .pdf-temp-container .prose-invert {
+            filter: invert(0); /* Undo inverse styles for printing */
+            color: black !important;
+        }
+        .pdf-temp-container .prose pre {
+            background-color: #f5f5f5 !important;
+            color: #333 !important;
+            border: 1px solid #ddd;
+        }
+        .pdf-temp-container .prose h1,
+        .pdf-temp-container .prose h2,
+        .pdf-temp-container .prose h3 {
+            color: #095797 !important; /* Use a dark color for headers */
+        }
+        .pdf-temp-container .prose code {
+            color: #000 !important;
+        }
     </style>
 </head>
+<body class="flex h-screen overflow-hidden">
 
-<body>
-    <!-- Consolidated Maintenance Page -->
-    <div>
-        <div class="container">
-            <div class="row">
-                <div class="col-md-8">
-                    <h1 class="err-pg-headng">Bienvenue à Votre Santé</h1>
+    <!-- Sidebar (History) -->
+    <aside class="hidden md:flex flex-col w-[260px] bg-[#202123] p-2 transition-all duration-300" id="sidebar">
+        <button onclick="startNewChat()" class="flex items-center gap-3 px-3 py-3 rounded-md border border-white/20 hover:bg-gray-900 transition-colors text-sm text-white mb-4">
+            <i class="ph ph-plus text-lg"></i>
+            New Chat
+        </button>
+
+        <!-- History List Container -->
+        <div id="history-list" class="flex-1 overflow-y-auto space-y-2">
+            <!-- History items will be injected here -->
+        </div>
+
+        <div class="border-t border-white/20 pt-2 mt-2">
+            <button onclick="openSettings()" class="flex items-center gap-3 px-3 py-3 w-full rounded-md hover:bg-[#2A2B32] text-sm text-white transition-colors">
+                <i class="ph ph-gear text-lg"></i>
+                API Settings
+            </button>
+        </div>
+    </aside>
+
+    <!-- Main Chat Area -->
+    <main class="flex-1 flex flex-col relative h-full">
+        
+        <!-- Mobile Header (Added menu button to show sidebar on mobile) -->
+        <header class="md:hidden flex items-center justify-between p-4 bg-[#343541] border-b border-white/10">
+            <button onclick="toggleMobileSidebar()" class="text-gray-300 hover:text-white"><i class="ph ph-list text-2xl"></i></button>
+            <span class="font-medium" id="mobile-chat-title">Agentic AI</span>
+            <button class="text-gray-300 hover:text-white" onclick="startNewChat()"><i class="ph ph-plus text-2xl"></i></button>
+        </header>
+
+        <!-- Chat Messages Container -->
+        <div id="chat-container" class="flex-1 overflow-y-auto scroll-smooth pb-32 pt-4">
+            
+            <!-- Welcome Screen -->
+            <div id="welcome-screen" class="flex flex-col items-center justify-center h-full text-center px-4">
+                <div class="bg-white/10 p-4 rounded-full mb-6">
+                    <i class="ph ph-robot text-4xl text-white"></i>
                 </div>
-            </div>
-
-            <div class="row err-pg-subh-spc"></div>
-
-            <div class="row">
-                <div class="col-md-8 ment-pg-sub-h-txt">
-                    <span class="err-pg-sub-head">Service temporairement indisponible</span>
-                    <span class="err-pg-sub-head-p">
-                        Le portail Votre Santé est en cours de maintenance et sera de retour plus tard.
-                    </span>
-                    <span class="err-pg-sub-head-p blw">
-                        En attendant, pour vos besoins de santé non urgents, appelez
-                        <strong>Info-Santé au 811</strong>, option 1 ou
-                        <strong>Info-Social au 811</strong>, option 2. En cas d’urgence, composez le
-                        <strong>911</strong>.
-                    </span>
-                </div>
-            </div>
-
-            <div class="row err-pg-btn-sec">
-                <div class="col-md-4" style="padding-left: 0;">
-                    <button class="err-pg-btn"
-                            onclick="window.open('https://www.quebec.ca/', '_blank');">
-                        Aller sur Québec.ca
+                <h1 class="text-2xl font-semibold mb-2 text-white">How can I help you today?</h1>
+                <p id="api-key-status" class="text-sm text-yellow-500 mb-8 cursor-pointer hover:underline" onclick="openSettings()">
+                    ⚠️ API Key not set. Click to configure.
+                </p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-2xl w-full">
+                    <button onclick="populateInput('Analyze this UI design for usability issues')" class="p-4 border border-white/20 rounded-xl hover:bg-[#40414F] text-left transition-colors">
+                        <div class="font-medium mb-1">Analyze Design</div>
+                        <div class="text-sm text-gray-400">Upload a Figma screenshot</div>
+                    </button>
+                    <button onclick="populateInput('Generate Jest test cases for a login component')" class="p-4 border border-white/20 rounded-xl hover:bg-[#40414F] text-left transition-colors">
+                        <div class="font-medium mb-1">Generate Tests</div>
+                        <div class="text-sm text-gray-400">Write robust unit tests</div>
+                    </button>
+                    <button onclick="populateInput('Generate a 5-slide presentation on the project architecture')" class="p-4 border border-white/20 rounded-xl hover:bg-[#40414F] text-left transition-colors">
+                        <div class="font-medium mb-1">Generate Slides</div>
+                        <div class="text-sm text-gray-400">Create a professional PDF deck</div>
+                    </button>
+                    <button onclick="populateInput('Explain the concept of Dependency Injection')" class="p-4 border border-white/20 rounded-xl hover:bg-[#40414F] text-left transition-colors">
+                        <div class="font-medium mb-1">Explain Concept</div>
+                        <div class="text-sm text-gray-400">Simple terms for complex topics</div>
                     </button>
                 </div>
             </div>
+
+            <!-- Messages will be injected here -->
+            <div id="messages-list" class="flex flex-col"></div>
+            
+            <!-- Loading Indicator -->
+            <div id="loading-indicator" class="hidden w-full border-b border-black/10 dark:border-gray-900/50 text-gray-800 dark:text-gray-100 bg-gray-50 dark:bg-[#444654]">
+                <div class="max-w-3xl mx-auto gap-4 p-4 md:gap-6 md:p-6 flex">
+                    <div class="w-8 flex flex-col relative items-end">
+                        <div class="w-8 h-8 rounded-sm bg-green-500 flex items-center justify-center">
+                            <i class="ph ph-robot text-white"></i>
+                        </div>
+                    </div>
+                    <div class="relative flex-1">
+                        <div class="flex gap-1 items-center h-6">
+                            <div class="typing-dot"></div>
+                            <div class="typing-dot"></div>
+                            <div class="typing-dot"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
 
-        <div class="ment-pg-disc-img-sec">
-            <!--
-              NOTE: Original src="/img-disconnect/" has been replaced with a
-              binary (base64) inline PNG placeholder. Replace with your real
-              base64 if you have the original image.
-            -->
-            <img
-                src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+X2DkAAAAASUVORK5CYII="
-                alt="image-disconnect" />
+        <!-- Input Area -->
+        <div class="absolute bottom-0 left-0 w-full glass-panel border-t border-white/10 pt-2 pb-6 px-4">
+            <div class="max-w-3xl mx-auto relative">
+                
+                <!-- File Preview Area -->
+                <div id="file-preview" class="hidden mb-2 flex gap-2 overflow-x-auto">
+                    <!-- Previews injected via JS -->
+                </div>
+
+                <!-- Input Box -->
+                <div class="relative flex items-end w-full p-3 bg-[#40414F] border border-transparent focus-within:border-white/20 rounded-xl shadow-md overflow-hidden ring-offset-2 ring-offset-transparent">
+                    
+                    <!-- Attachment Button -->
+                    <button onclick="document.getElementById('file-upload').click()" class="p-2 mr-2 text-gray-400 hover:text-white transition-colors rounded-md" title="Attach file/image">
+                        <i class="ph ph-paperclip text-xl"></i>
+                    </button>
+                    <input type="file" id="file-upload" class="hidden" multiple accept="image/*, .txt, .md, .js, .html, .css, .py, .json" onchange="handleFileSelect(event)">
+
+                    <!-- Text Area -->
+                    <textarea id="user-input" rows="1" class="w-full max-h-[200px] bg-transparent border-0 focus:ring-0 p-0 py-2 pl-2 text-white placeholder-gray-400 resize-none overflow-y-auto outline-none" placeholder="Send a message..." oninput="autoResize(this)" onkeydown="handleEnter(event)"></textarea>
+                    
+                    <!-- Voice Button -->
+                    <button id="voice-btn" onclick="toggleVoice()" class="p-2 ml-2 text-gray-400 hover:text-white transition-colors rounded-md" title="Use Voice Input">
+                        <i class="ph ph-microphone text-xl"></i>
+                    </button>
+
+                    <!-- Send Button -->
+                    <button id="send-btn" onclick="sendMessage()" class="p-2 ml-2 bg-[#19C37D] hover:bg-[#1a885d] text-white rounded-md shadow-sm transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+                        <i class="ph ph-paper-plane-right text-xl"></i>
+                    </button>
+                </div>
+                <div class="text-center text-xs text-gray-500 mt-2">
+                    AI can make mistakes. Consider checking important information.
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Settings Modal -->
+    <div id="settings-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/60">
+        <div class="bg-[#202123] w-full max-w-md p-6 rounded-lg border border-white/10 shadow-xl transform transition-all">
+            <h2 class="text-xl font-semibold mb-4 text-white">API Settings</h2>
+            
+            <div class="mb-4">
+                <label class="block text-sm text-gray-300 mb-2">Google Gemini API Key</label>
+                <input type="password" id="api-key-input" class="w-full bg-[#343541] border border-white/20 rounded p-2 text-white focus:border-[#10a37f] focus:outline-none" placeholder="sk-...">
+                <p class="text-xs text-gray-500 mt-2">
+                    Get a key from <a href="https://aistudio.google.com/app/apikey" target="_blank" class="text-blue-400 hover:underline">Google AI Studio</a>.
+                    Your key is stored locally in your browser.
+                </p>
+            </div>
+
+            <div class="flex justify-end gap-3">
+                <button onclick="closeSettings()" class="px-4 py-2 text-sm text-gray-300 hover:text-white">Cancel</button>
+                <button onclick="saveSettings()" class="px-4 py-2 text-sm bg-[#10a37f] hover:bg-[#1a885d] text-white rounded transition-colors">Save Key</button>
+            </div>
         </div>
     </div>
+
+    <script>
+        // --- Configuration ---
+        let apiKey = localStorage.getItem('gemini_api_key') || "";
+        const modelName = "gemini-2.5-flash-preview-09-2025";
+        
+        // --- State ---
+        const LOCAL_STORAGE_KEY_SESSIONS = 'agentic_ai_sessions';
+        const LOCAL_STORAGE_KEY_ACTIVE = 'agentic_ai_active_session_id';
+
+        let allSessions = [];       // Array storing metadata for all sessions
+        let activeSessionId = null; // ID of the currently loaded session
+        let chatHistory = [];       // Messages of the active session (used for API context)
+        let attachments = [];       // Attachments for the *next* user message
+        let isRecording = false;
+        let recognition;
+
+        // --- PDF Constants for Presentation Styling (NEW) ---
+        const SLIDE_WIDTH = 297; // A4 landscape width in mm
+        const SLIDE_HEIGHT = 210; // A4 landscape height in mm
+        const MARGIN = 15;
+        const ACCENT_COLOR = '#19C37D';
+        const FONT_COLOR = '#ECECF1';
+        const BG_COLOR = '#202123'; 
+        const TEXT_GRAY = '#9CA3AF';
+
+
+        // --- Utility Functions ---
+        function generateUUID() {
+            return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+                var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+                return v.toString(16);
+            });
+        }
+        
+        function timeSince(date) {
+            const seconds = Math.floor((new Date() - date) / 1000);
+            let interval = Math.floor(seconds / 31536000);
+            if (interval >= 1) return interval + " years ago";
+            interval = Math.floor(seconds / 2592000);
+            if (interval >= 1) return interval + " months ago";
+            interval = Math.floor(seconds / 86400);
+            if (interval >= 1) return interval + " days ago";
+            interval = Math.floor(seconds / 3600);
+            if (interval >= 1) return interval + " hours ago";
+            interval = Math.floor(seconds / 60);
+            if (interval >= 1) return interval + " minutes ago";
+            return "Just now";
+        }
+
+
+        // --- History & Persistence Management ---
+
+        function loadSessionList() {
+            try {
+                const storedSessions = localStorage.getItem(LOCAL_STORAGE_KEY_SESSIONS);
+                allSessions = storedSessions ? JSON.parse(storedSessions) : [];
+                // Sort by most recent activity
+                allSessions.sort((a, b) => new Date(b.lastActive) - new Date(a.lastActive));
+            } catch (e) {
+                console.error("Error loading sessions from localStorage:", e);
+                allSessions = [];
+            }
+        }
+
+        function saveSessionList() {
+            localStorage.setItem(LOCAL_STORAGE_KEY_SESSIONS, JSON.stringify(allSessions));
+        }
+        
+        function saveCurrentSession() {
+            if (!activeSessionId || chatHistory.length === 0) return;
+
+            const sessionIndex = allSessions.findIndex(s => s.id === activeSessionId);
+            const sessionData = {
+                id: activeSessionId,
+                title: allSessions[sessionIndex]?.title,
+                lastActive: new Date().toISOString(),
+                history: chatHistory 
+            };
+            
+            // Save full history content
+            localStorage.setItem(`session_content_${activeSessionId}`, JSON.stringify(chatHistory));
+
+            // Update session list metadata
+            if (sessionIndex !== -1) {
+                allSessions[sessionIndex].lastActive = sessionData.lastActive;
+                allSessions.sort((a, b) => new Date(b.lastActive) - new Date(a.lastActive));
+            }
+            saveSessionList();
+            renderSidebar();
+        }
+
+        function renderSidebar() {
+            const listEl = document.getElementById('history-list');
+            listEl.innerHTML = '';
+
+            if (allSessions.length === 0) {
+                listEl.innerHTML = '<div class="px-3 py-2 text-xs text-gray-500 italic">No recent chats. Start a new conversation!</div>';
+                return;
+            }
+
+            allSessions.forEach(session => {
+                const isActive = session.id === activeSessionId;
+                const lastActiveText = timeSince(new Date(session.lastActive));
+
+                const itemDiv = document.createElement('div');
+                itemDiv.id = `history-${session.id}`;
+                itemDiv.className = `group relative flex items-center justify-between p-3 rounded-md text-sm cursor-pointer transition-colors ${
+                    isActive ? 'bg-[#40414F] text-white' : 'text-gray-300 hover:bg-[#2A2B32]'
+                }`;
+                itemDiv.onclick = () => loadSession(session.id);
+
+                itemDiv.innerHTML = `
+                    <div class="flex items-center space-x-2 overflow-hidden">
+                        <i class="ph ph-chat-dots text-lg shrink-0"></i>
+                        <div class="flex flex-col min-w-0">
+                            <span class="truncate font-medium">${session.title || 'Untitled Chat'}</span>
+                            <span class="text-xs ${isActive ? 'text-gray-400' : 'text-gray-500'}">${lastActiveText}</span>
+                        </div>
+                    </div>
+                    <button onclick="deleteSession(event, '${session.id}')" 
+                            class="absolute right-2 p-1 text-gray-400 hover:text-red-400 transition-opacity ${isActive ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}" 
+                            title="Delete Chat">
+                        <i class="ph ph-trash text-base"></i>
+                    </button>
+                `;
+
+                listEl.appendChild(itemDiv);
+            });
+        }
+
+        function startNewChat() {
+            // Save the existing session state before switching
+            saveCurrentSession(); 
+            
+            activeSessionId = generateUUID();
+            chatHistory = [];
+            attachments = [];
+            localStorage.setItem(LOCAL_STORAGE_KEY_ACTIVE, activeSessionId);
+
+            // Add new session placeholder to the list
+            allSessions.unshift({
+                id: activeSessionId,
+                title: "New Chat...",
+                lastActive: new Date().toISOString(),
+            });
+            saveSessionList();
+            
+            // Clear UI
+            document.getElementById('messages-list').innerHTML = '';
+            document.getElementById('welcome-screen').style.display = 'flex';
+            document.getElementById('mobile-chat-title').textContent = 'Agentic AI';
+            updateFilePreview();
+            renderSidebar();
+        }
+
+        function loadSession(sessionId) {
+            // Do nothing if already active
+            if (activeSessionId === sessionId) return;
+
+            // Save the old session before loading new one
+            saveCurrentSession();
+
+            activeSessionId = sessionId;
+            localStorage.setItem(LOCAL_STORAGE_KEY_ACTIVE, sessionId);
+
+            try {
+                const storedContent = localStorage.getItem(`session_content_${sessionId}`);
+                chatHistory = storedContent ? JSON.parse(storedContent) : [];
+            } catch (e) {
+                console.error(`Error loading content for session ${sessionId}:`, e);
+                chatHistory = [];
+            }
+            
+            // Render UI for the loaded session
+            renderMessages();
+            renderSidebar();
+        }
+
+        function deleteSession(event, sessionId) {
+            event.stopPropagation(); // Prevent the click from triggering loadSession
+
+            if (!confirm("Are you sure you want to delete this chat history?")) return;
+
+            // Remove from metadata list
+            allSessions = allSessions.filter(s => s.id !== sessionId);
+            saveSessionList();
+            localStorage.removeItem(`session_content_${sessionId}`);
+
+            if (activeSessionId === sessionId) {
+                // If we deleted the active session, start a new one
+                startNewChat(); 
+            } else {
+                renderSidebar();
+            }
+        }
+        
+        function renderMessages() {
+            const list = document.getElementById('messages-list');
+            list.innerHTML = '';
+            document.getElementById('welcome-screen').style.display = 'none';
+
+            // Find session title for mobile header
+            const session = allSessions.find(s => s.id === activeSessionId);
+            document.getElementById('mobile-chat-title').textContent = session ? session.title : 'Agentic AI';
+            
+            chatHistory.forEach(message => {
+                const text = message.parts.find(p => p.text)?.text || "";
+                const msgAttachments = message.parts.filter(p => p.inlineData).map(p => ({
+                    name: p.inlineData.mimeType.split('/').pop() || 'file',
+                    mimeType: p.inlineData.mimeType,
+                    data: p.inlineData.data,
+                    isImage: p.inlineData.mimeType.startsWith('image/')
+                }));
+                appendMessageToUI(message.role, text, msgAttachments);
+            });
+            // Scroll to bottom after loading messages
+            document.getElementById('chat-container').scrollTop = document.getElementById('chat-container').scrollHeight;
+        }
+
+        // --- Initialization ---
+        document.addEventListener('DOMContentLoaded', () => {
+            updateKeyStatus();
+
+            marked.setOptions({
+                highlight: function(code, lang) {
+                    const language = highlight.getLanguage(lang) ? lang : 'plaintext';
+                    return highlight.highlight(code, { language }).value;
+                },
+                langPrefix: 'hljs language-'
+            });
+
+            // Load all session metadata
+            loadSessionList();
+            
+            // Determine active session
+            const storedActiveId = localStorage.getItem(LOCAL_STORAGE_KEY_ACTIVE);
+            
+            if (allSessions.length > 0) {
+                const sessionToLoad = allSessions.find(s => s.id === storedActiveId) || allSessions[0];
+                loadSession(sessionToLoad.id);
+            } else {
+                // Start a new chat if no history exists
+                startNewChat();
+            }
+
+            // Setup Voice Recognition (existing logic)
+            if ('webkitSpeechRecognition' in window) {
+                recognition = new webkitSpeechRecognition();
+                recognition.continuous = false;
+                recognition.interimResults = false;
+                recognition.onresult = function(event) {
+                    const text = event.results[0][0].transcript;
+                    const input = document.getElementById('user-input');
+                    input.value += (input.value.length > 0 ? ' ' : '') + text;
+                    autoResize(input);
+                    toggleVoice(false);
+                };
+                recognition.onerror = function(event) {
+                    console.error("Speech recognition error", event);
+                    toggleVoice(false);
+                };
+                recognition.onend = function() {
+                    toggleVoice(false);
+                }
+            } else {
+                document.getElementById('voice-btn').style.display = 'none';
+            }
+
+            // Auto-open settings if no key
+            if(!apiKey) {
+                setTimeout(openSettings, 500);
+            }
+        });
+
+        // --- Settings Functions ---
+        function openSettings() {
+            document.getElementById('api-key-input').value = apiKey;
+            document.getElementById('settings-modal').classList.remove('hidden');
+            document.getElementById('settings-modal').classList.add('flex');
+        }
+
+        function closeSettings() {
+            document.getElementById('settings-modal').classList.add('hidden');
+            document.getElementById('settings-modal').classList.remove('flex');
+        }
+
+        function saveSettings() {
+            const input = document.getElementById('api-key-input').value.trim();
+            if (input) {
+                apiKey = input;
+                localStorage.setItem('gemini_api_key', apiKey);
+            } else {
+                apiKey = "";
+                localStorage.removeItem('gemini_api_key');
+            }
+            updateKeyStatus();
+            closeSettings();
+        }
+
+        function updateKeyStatus() {
+            const statusEl = document.getElementById('api-key-status');
+            if (apiKey) {
+                statusEl.innerHTML = '<span class="text-green-500">✓ API Key Configured</span>';
+                statusEl.classList.remove('text-yellow-500');
+            } else {
+                statusEl.innerHTML = '⚠️ API Key not set. Click to configure.';
+            }
+        }
+        
+        // --- UI & Input Functions ---
+
+        function toggleMobileSidebar() {
+             const sidebar = document.getElementById('sidebar');
+             sidebar.classList.toggle('hidden');
+             sidebar.classList.toggle('absolute');
+             sidebar.classList.toggle('h-full');
+             sidebar.classList.toggle('z-40');
+        }
+
+        function autoResize(textarea) {
+            textarea.style.height = 'auto';
+            textarea.style.height = textarea.scrollHeight + 'px';
+            document.getElementById('send-btn').disabled = (textarea.value.trim() === '' && attachments.length === 0);
+        }
+
+        function populateInput(text) {
+            const input = document.getElementById('user-input');
+            input.value = text;
+            autoResize(input);
+            document.getElementById('user-input').focus();
+        }
+
+        function handleEnter(e) {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                sendMessage();
+            }
+        }
+
+        function toggleVoice(forceState) {
+            const btn = document.getElementById('voice-btn');
+            const icon = btn.querySelector('i');
+            
+            if (forceState === false || isRecording) {
+                isRecording = false;
+                if (recognition) recognition.stop();
+                icon.className = "ph ph-microphone text-xl";
+                btn.classList.remove('text-red-500', 'animate-pulse');
+            } else {
+                isRecording = true;
+                if (recognition) recognition.start();
+                icon.className = "ph ph-microphone-slash text-xl";
+                btn.classList.add('text-red-500', 'animate-pulse');
+            }
+        }
+
+        // --- File Handling ---
+
+        function handleFileSelect(event) {
+            const files = event.target.files;
+            if (!files.length) return;
+
+            Array.from(files).forEach(file => {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const base64Data = e.target.result.split(',')[1];
+                    const mimeType = file.type;
+                    
+                    attachments.push({
+                        name: file.name,
+                        mimeType: mimeType,
+                        data: base64Data,
+                        isImage: mimeType.startsWith('image/')
+                    });
+                    updateFilePreview();
+                };
+                reader.readAsDataURL(file);
+            });
+            event.target.value = ''; 
+        }
+
+        function updateFilePreview() {
+            const container = document.getElementById('file-preview');
+            if (attachments.length === 0) {
+                container.classList.add('hidden');
+                return;
+            }
+            container.classList.remove('hidden');
+            container.innerHTML = '';
+            
+            attachments.forEach((file, index) => {
+                const div = document.createElement('div');
+                div.className = "relative flex items-center gap-2 bg-[#343541] p-2 rounded-lg border border-white/20 min-w-[120px] max-w-[200px]";
+                
+                let icon = '<i class="ph ph-file-text text-xl text-blue-400"></i>';
+                if (file.isImage) {
+                    icon = `<img src="data:${file.mimeType};base64,${file.data}" class="w-8 h-8 object-cover rounded">`;
+                }
+
+                div.innerHTML = `
+                    ${icon}
+                    <span class="text-xs truncate text-gray-300 flex-1">${file.name}</span>
+                    <button onclick="removeAttachment(${index})" class="text-gray-400 hover:text-red-400">
+                        <i class="ph ph-x-circle"></i>
+                    </button>
+                `;
+                container.appendChild(div);
+            });
+            autoResize(document.getElementById('user-input'));
+        }
+
+        function removeAttachment(index) {
+            attachments.splice(index, 1);
+            updateFilePreview();
+        }
+        
+        // --- Download Dropdown Handlers ---
+
+        function toggleDownloadDropdown(button) {
+            const actionsDiv = button.closest('.message-actions');
+            const dropdown = actionsDiv.querySelector('#download-dropdown');
+            
+            document.querySelectorAll('#download-dropdown').forEach(d => {
+                if (d !== dropdown) {
+                    d.classList.add('hidden');
+                }
+            });
+            
+            dropdown.classList.toggle('hidden');
+        }
+
+        function hideDownloadDropdown(button) {
+            const dropdown = button.closest('#download-dropdown');
+            if (dropdown) dropdown.classList.add('hidden');
+        }
+
+        // --- Core Logic ---
+
+        async function sendMessage() {
+            if (!apiKey) {
+                openSettings();
+                return;
+            }
+
+            const inputEl = document.getElementById('user-input');
+            const text = inputEl.value.trim();
+            
+            if (!text && attachments.length === 0) return;
+
+            document.getElementById('welcome-screen').style.display = 'none';
+            inputEl.value = '';
+            inputEl.style.height = 'auto';
+            
+            // --- 1. Session Setup / Titling ---
+            const currentSessionIndex = allSessions.findIndex(s => s.id === activeSessionId);
+            if (currentSessionIndex !== -1 && allSessions[currentSessionIndex].title === "New Chat...") {
+                // Auto-title the session based on the first user message
+                let title = text.substring(0, 50);
+                if (text.length > 50) title += '...';
+                allSessions[currentSessionIndex].title = title || "Untitled Chat";
+                document.getElementById('mobile-chat-title').textContent = title;
+            }
+            
+            // 2. Add User Message to UI
+            const currentAttachments = [...attachments];
+            appendMessageToUI('user', text, currentAttachments);
+            
+            // 3. Prepare parts for API and update active chatHistory
+            const userParts = [];
+            if (text) userParts.push({ text: text });
+            currentAttachments.forEach(att => {
+                userParts.push({ inlineData: { mimeType: att.mimeType, data: att.data } });
+            });
+            
+            chatHistory.push({ role: "user", parts: userParts });
+
+            attachments = []; 
+            updateFilePreview();
+
+            const loadingEl = document.getElementById('loading-indicator');
+            loadingEl.classList.remove('hidden');
+            document.getElementById('chat-container').scrollTop = document.getElementById('chat-container').scrollHeight;
+
+            try {
+                // 4. Call API with FULL history
+                const responseText = await callGemini(chatHistory);
+                
+                loadingEl.classList.add('hidden');
+                
+                // 5. Add Model Response to UI and History
+                appendMessageToUI('model', responseText);
+                chatHistory.push({ role: "model", parts: [{ text: responseText }] });
+                
+                // 6. Save State
+                saveCurrentSession(); 
+
+            } catch (error) {
+                loadingEl.classList.add('hidden');
+                
+                let errorMsg;
+                if (error.message.includes('403')) {
+                    errorMsg = "API Error 403 (Permission Denied/Invalid Key): Check if your API Key is correct and has the 'Generative Language API' enabled.";
+                } else if (error.message.includes('404')) {
+                     errorMsg = "API Error 404 (Model Not Found): The model version might be deprecated or unavailable. Please contact support.";
+                } else if (error.message.includes('400')) {
+                     errorMsg = "API Error 400 (Bad Request): The request payload (including images/text) might be too large or malformed. Try a simpler prompt or ensure your API Key is correct.";
+                } else if (error.message.includes('429')) {
+                     errorMsg = "API Error 429 (Rate Limit): You are sending too many requests too quickly. Please wait a moment before trying again.";
+                } else if (error.message.includes('503')) {
+                     errorMsg = "API Error 503 (Service Unavailable): The server is temporarily overloaded or down. Please try again in a few moments.";
+                } else {
+                     errorMsg = `An unknown API error occurred: ${error.message}.`;
+                }
+
+                // If the user's last message caused an error, remove it from chatHistory
+                chatHistory.pop(); 
+                
+                appendMessageToUI('error', errorMsg);
+                console.error("API Error during fetch:", error);
+            }
+        }
+
+        // Renamed function to avoid confusion with the public sendMessage
+        function appendMessageToUI(role, text, messageAttachments = []) {
+            const list = document.getElementById('messages-list');
+            const div = document.createElement('div');
+            
+            const bgColor = role === 'user' ? 'bg-[#343541]' : 'bg-[#444654]';
+            const icon = role === 'user' 
+                ? '<div class="w-8 h-8 rounded-sm bg-purple-600 flex items-center justify-center"><i class="ph ph-user text-white"></i></div>'
+                : '<div class="w-8 h-8 rounded-sm bg-green-500 flex items-center justify-center"><i class="ph ph-robot text-white"></i></div>';
+            
+            const rawText = text; 
+            
+            div.dataset.rawContent = role === 'model' ? encodeURIComponent(rawText) : '';
+
+            div.className = `w-full border-b border-black/10 dark:border-gray-900/50 text-gray-800 dark:text-gray-100 ${bgColor} group`;
+            
+            let attachmentHTML = '';
+            if (messageAttachments.length > 0) {
+                attachmentHTML = `<div class="flex gap-2 mb-3 flex-wrap">`;
+                messageAttachments.forEach(att => {
+                    if (att.isImage) {
+                        attachmentHTML += `<img src="data:${att.mimeType};base64,${att.data}" class="max-h-48 rounded-md border border-white/10 hover:opacity-90 transition-opacity">`;
+                    } else {
+                        attachmentHTML += `<div class="flex items-center gap-2 bg-black/20 p-2 rounded text-sm"><i class="ph ph-file"></i> ${att.name}</div>`;
+                    }
+                });
+                attachmentHTML += `</div>`;
+            }
+
+            let contentHTML = '';
+            let parsedHtmlContent = '';
+            
+            if (role === 'model') {
+                parsedHtmlContent = marked.parse(text);
+                contentHTML = parsedHtmlContent;
+            } else if (role === 'error') {
+                contentHTML = `<span class="text-red-400 font-medium">${text}</span>`;
+            } else {
+                const escapedText = text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/\n/g, "<br>");
+                contentHTML = `<p>${escapedText}</p>`;
+            }
+            
+            div.dataset.renderedContent = role === 'model' ? encodeURIComponent(parsedHtmlContent) : '';
+
+
+            // --- Download and Copy Action Menu (Enhanced with Presentation PDF) ---
+            let actionsMenu = '';
+            if (role === 'model') {
+                actionsMenu = `
+                <div class="absolute top-0 right-0 p-2 message-actions flex gap-1">
+                    <button onclick="copyRawContent(this)" class="p-1 rounded hover:bg-black/20 text-gray-400 hover:text-white transition-colors" title="Copy to clipboard">
+                        <i class="ph ph-copy text-lg"></i>
+                    </button>
+                    <div class="relative inline-block text-left">
+                        <button onclick="toggleDownloadDropdown(this)" class="p-1 rounded hover:bg-black/20 text-gray-400 hover:text-white transition-colors" title="Download">
+                            <i class="ph ph-download text-lg"></i>
+                        </button>
+                        <div class="absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-[#202123] ring-1 ring-white/10 focus:outline-none hidden z-10" id="download-dropdown">
+                            <div class="py-1">
+                                <button onclick="downloadRawContent(this, 'txt');" class="block w-full text-left px-4 py-2 text-sm text-gray-300 hover:bg-[#343541]">
+                                    Download as Raw Text (.txt)
+                                </button>
+                                <button onclick="downloadFormattedContent(this);" class="block w-full text-left px-4 py-2 text-sm text-gray-300 hover:bg-[#343541]">
+                                    Download as Formatted PDF
+                                </button>
+                                <hr class="border-gray-700 my-1">
+                                <button onclick="downloadRawContent(this, 'presentation');" class="block w-full text-left px-4 py-2 text-sm text-teal-300 font-medium hover:bg-[#343541]">
+                                    Download as Slides (PPT PDF)
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>`;
+            }
+
+            div.innerHTML = `
+                <div class="max-w-3xl mx-auto gap-4 p-4 md:gap-6 md:p-6 flex relative">
+                    <div class="w-8 flex flex-col relative items-end shrink-0">
+                        ${icon}
+                    </div>
+                    <div class="relative flex-1 overflow-hidden">
+                        ${attachmentHTML}
+                        ${actionsMenu}
+                        <div class="prose prose-invert max-w-none w-full break-words">
+                            ${contentHTML}
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            list.appendChild(div);
+            div.querySelectorAll('pre code').forEach((block) => {
+                hljs.highlightElement(block);
+            });
+            document.getElementById('chat-container').scrollTop = document.getElementById('chat-container').scrollHeight;
+        }
+
+        // --- PDF Presentation Logic (UNCHANGED) ---
+
+        function parseSlidesFromMarkdown(rawText) {
+            const lines = rawText.split('\n');
+            const slides = [];
+            let currentSlide = null;
+            let currentContent = [];
+
+            lines.forEach(line => {
+                const titleMatch = line.match(/##\s*SLIDE\s*\d*:\s*(.*)/i);
+                
+                if (titleMatch) {
+                    if (currentSlide) {
+                        currentSlide.content_points = currentContent;
+                        slides.push(currentSlide);
+                        currentContent = [];
+                    }
+                    currentSlide = {
+                        title: titleMatch[1].trim(),
+                        content_points: []
+                    };
+                } else if (currentSlide && (line.trim().startsWith('* ') || line.trim().startsWith('- '))) {
+                    // Capture bullet points
+                    currentContent.push(line.trim().substring(2).trim());
+                } else if (currentSlide && line.trim().length > 0 && !line.startsWith('```')) {
+                    // Capture general paragraphs as content points if not part of a code block
+                    currentContent.push(line.trim());
+                }
+            });
+
+            // Push the last slide
+            if (currentSlide) {
+                currentSlide.content_points = currentContent;
+                slides.push(currentSlide);
+            }
+            
+            return slides;
+        }
+
+        function generatePresentationPDF(rawText) {
+            if (typeof window.jspdf === 'undefined') {
+                alert("PDF library not loaded. Cannot generate PDF.");
+                return;
+            }
+
+            const slidesData = parseSlidesFromMarkdown(rawText);
+            if (slidesData.length === 0) {
+                alert("Could not parse structured slide data from the AI response. Ensure the response uses the '## SLIDE X: Title' format.");
+                return;
+            }
+
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF({
+                orientation: 'landscape',
+                unit: 'mm',
+                format: 'a4'
+            });
+
+            slidesData.forEach((slide, index) => {
+                if (index > 0) {
+                    doc.addPage();
+                }
+
+                // 1. Setup Dark Background
+                doc.setFillColor(BG_COLOR);
+                doc.rect(0, 0, SLIDE_WIDTH, SLIDE_HEIGHT, 'F');
+                
+                let y = MARGIN + 10;
+                
+                // 2. Draw Title
+                doc.setFontSize(28);
+                doc.setFont('helvetica', 'bold');
+                doc.setTextColor(ACCENT_COLOR);
+                
+                const titleLines = doc.splitTextToSize(slide.title, SLIDE_WIDTH - (MARGIN * 2));
+                titleLines.forEach(line => {
+                    doc.text(line, MARGIN, y);
+                    y += 10;
+                });
+                
+                // Draw Separator Line
+                doc.setDrawColor(ACCENT_COLOR);
+                doc.setLineWidth(0.7);
+                doc.line(MARGIN, y + 2, SLIDE_WIDTH - MARGIN, y + 2);
+                y += 15;
+
+                // 3. Draw Content Points
+                doc.setFontSize(14);
+                doc.setFont('helvetica', 'normal');
+                doc.setTextColor(FONT_COLOR);
+                
+                const MAX_CONTENT_WIDTH = SLIDE_WIDTH - (MARGIN * 2);
+                
+                slide.content_points.forEach(point => {
+                    // Detect bold text or headers to style differently
+                    const isStrong = point.includes('**');
+                    let displayPoint = point.replace(/\*\*/g, '');
+
+                    if (y > SLIDE_HEIGHT - MARGIN) {
+                        doc.addPage();
+                        doc.setFillColor(BG_COLOR);
+                        doc.rect(0, 0, SLIDE_WIDTH, SLIDE_HEIGHT, 'F');
+                        y = MARGIN + 10;
+                        doc.setFontSize(14);
+                        doc.setTextColor(FONT_COLOR);
+                    }
+
+                    if (isStrong) {
+                        doc.setFont('helvetica', 'bold');
+                        doc.setFontSize(16);
+                        doc.setTextColor('#ffffff');
+                    } else {
+                        doc.setFont('helvetica', 'normal');
+                        doc.setFontSize(14);
+                        doc.setTextColor(FONT_COLOR);
+                    }
+                    
+                    // Text Wrapping
+                    const wrappedText = doc.splitTextToSize(`• ${displayPoint}`, MAX_CONTENT_WIDTH - 10);
+                    
+                    wrappedText.forEach(line => {
+                        if (y > SLIDE_HEIGHT - MARGIN) {
+                            doc.addPage();
+                            doc.setFillColor(BG_COLOR);
+                            doc.rect(0, 0, SLIDE_WIDTH, SLIDE_HEIGHT, 'F');
+                            y = MARGIN + 10;
+                        }
+                        doc.text(line, MARGIN + 5, y);
+                        y += 7; // Line spacing
+                    });
+                    y += 3; // Extra spacing after bullet point group
+                });
+                
+                // 4. Footer
+                doc.setFontSize(10);
+                doc.setTextColor(TEXT_GRAY);
+                doc.text(`Agentic AI Workspace | Slide ${index + 1} of ${slidesData.length}`, SLIDE_WIDTH - MARGIN, SLIDE_HEIGHT - 5, { align: 'right' });
+            });
+
+            doc.save(`presentation_ai_deck_${new Date().toISOString().slice(0, 10)}.pdf`);
+        }
+
+
+        // --- Download and Copy Logic (UPDATED) ---
+        
+        // New function to handle the HTML -> PDF conversion
+        function downloadFormattedContent(btnElement) {
+            hideDownloadDropdown(btnElement);
+            const messageDiv = btnElement.closest('.group');
+            if (!messageDiv || !messageDiv.dataset.renderedContent) return;
+
+            const renderedHTML = decodeURIComponent(messageDiv.dataset.renderedContent);
+            const fileName = `ai_formatted_response_${new Date().toISOString().slice(0, 10)}.pdf`;
+            
+            // Create a temporary, hidden container for rendering the HTML
+            const tempDiv = document.createElement('div');
+            tempDiv.innerHTML = renderedHTML;
+            tempDiv.className = 'pdf-temp-container'; // Apply styling overrides for contrast
+            tempDiv.style.position = 'absolute';
+            tempDiv.style.left = '-9999px'; 
+            document.body.appendChild(tempDiv);
+
+            // Use html2canvas to render the hidden container to a canvas
+            html2canvas(tempDiv, {
+                scale: 2, // Increase scale for better resolution
+                logging: false,
+                useCORS: true,
+                backgroundColor: '#ffffff' // Ensure white background
+            }).then(canvas => {
+                const { jsPDF } = window.jspdf;
+                const doc = new jsPDF({
+                    orientation: 'portrait',
+                    unit: 'px',
+                    format: 'a4'
+                });
+                
+                const canvasWidth = canvas.width;
+                const canvasHeight = canvas.height;
+                const pdfWidth = doc.internal.pageSize.getWidth();
+                const pdfHeight = doc.internal.pageSize.getHeight();
+                
+                // Calculate scale to fit canvas width to PDF width (with margins)
+                const margin = 20;
+                const scale = (pdfWidth - 2 * margin) / canvasWidth;
+                let finalHeight = canvasHeight * scale;
+                
+                let position = margin;
+                
+                // If the content is longer than one page, split it
+                let heightLeft = finalHeight;
+                
+                while (heightLeft > 0) {
+                    if (position !== margin) {
+                        doc.addPage();
+                        position = margin;
+                    }
+                    
+                    const clipHeight = Math.min(heightLeft, pdfHeight - 2 * margin);
+                    
+                    doc.addImage(
+                        canvas.toDataURL('image/jpeg', 1.0), 
+                        'JPEG', 
+                        margin, 
+                        position, 
+                        pdfWidth - 2 * margin, 
+                        finalHeight, 
+                        undefined, 
+                        'FAST',
+                        0,
+                        -(finalHeight - heightLeft) / scale 
+                    );
+
+                    heightLeft -= clipHeight;
+                    position += clipHeight; // Prepare for next page if needed
+                }
+
+                doc.save(fileName);
+                document.body.removeChild(tempDiv);
+            }).catch(error => {
+                console.error("Error generating formatted PDF:", error);
+                document.body.removeChild(tempDiv);
+                alert("Error generating formatted PDF. Try the raw text download.");
+            });
+        }
+
+
+        function downloadRawContent(btnElement, format) {
+            hideDownloadDropdown(btnElement); 
+            let messageDiv = btnElement.closest('.group');
+            if (!messageDiv || !messageDiv.dataset.rawContent) return;
+
+            const rawText = decodeURIComponent(messageDiv.dataset.rawContent);
+            const fileName = `ai_response_${new Date().toISOString().slice(0, 10)}`;
+
+            if (format === 'txt') {
+                const blob = new Blob([rawText], { type: 'text/plain;charset=utf-8' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `${fileName}.txt`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+
+            } else if (format === 'presentation') {
+                generatePresentationPDF(rawText);
+
+            }
+            // Note: The old 'pdf' format is now handled by downloadFormattedContent()
+        }
+
+        function copyRawContent(btnElement) {
+            let messageDiv = btnElement.closest('.group');
+            if (!messageDiv || !messageDiv.dataset.rawContent) return;
+
+            const rawText = decodeURIComponent(messageDiv.dataset.rawContent);
+            
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(rawText).then(() => {
+                    showCopySuccess(btnElement);
+                }).catch(err => {
+                    console.error('Clipboard API failed, trying execCommand:', err);
+                    fallbackCopy(rawText, btnElement);
+                });
+            } else {
+                fallbackCopy(rawText, btnElement);
+            }
+        }
+
+        function fallbackCopy(text, btnElement) {
+            const textarea = document.createElement('textarea');
+            textarea.value = text;
+            textarea.style.position = 'fixed'; 
+            textarea.style.opacity = '0';
+            document.body.appendChild(textarea);
+            textarea.select();
+            
+            let success = false;
+            try {
+                success = document.execCommand('copy');
+            } catch (err) {
+                console.error('Final fallback: Unable to copy via execCommand', err);
+            }
+            document.body.removeChild(textarea);
+
+            if (success) {
+                showCopySuccess(btnElement);
+            } else {
+                console.error("Copy failed completely.");
+            }
+        }
+
+        function showCopySuccess(btnElement) {
+            const copyButton = btnElement.closest('.message-actions').querySelector('[title="Copy to clipboard"]');
+            
+            const originalIcon = copyButton.innerHTML;
+            copyButton.innerHTML = '<i class="ph ph-check text-green-400 text-lg"></i>';
+            setTimeout(() => {
+                copyButton.innerHTML = originalIcon;
+            }, 2000);
+        }
+
+        async function callGemini(history) {
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${apiKey}`;
+            
+            const payload = {
+                contents: history,
+                systemInstruction: {
+                    // --- ENHANCED SYSTEM INSTRUCTION ---
+                    parts: [{ text: "You are a highly capable Agentic AI Assistant, specialized in software engineering and content strategy. Your expertise includes coding, software architecture, UI/UX analysis, and summarizing complex documents. When generating code, provide complete, production-ready solutions. When analyzing designs, be critical and constructive. If asked to generate a presentation (using terms like 'PPT', 'slides', or 'deck'), you must structure your output using strict Markdown: use '## SLIDE X: Title' for slide headings and standard Markdown lists or paragraphs for content. Use Markdown for all formatting." }]
+                    // ------------------------------------
+                }
+            };
+
+            const delays = [1000, 2000, 4000, 8000, 16000];
+            
+            for (let i = 0; i < delays.length; i++) {
+                try {
+                    const response = await fetch(url, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+
+                    if (!response.ok) {
+                        if ((response.status === 429 || response.status === 503) && i < delays.length - 1) {
+                            console.warn(`Transient API issue (${response.status}). Retrying in ${delays[i]}ms...`);
+                            await new Promise(r => setTimeout(r, delays[i]));
+                            continue; 
+                        }
+                        throw new Error(`API Error: ${response.status} ${response.statusText}`);
+                    }
+
+                    const data = await response.json();
+                    return data.candidates?.[0]?.content?.parts?.[0]?.text || "No response generated.";
+
+                } catch (e) {
+                    if (i === delays.length - 1) {
+                        throw e; 
+                    }
+                    await new Promise(r => setTimeout(r, delays[i]));
+                }
+            }
+            
+            throw new Error("API call failed after multiple retries. Check API key and service status.");
+        }
+    </script>
 </body>
 </html>
