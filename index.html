@@ -13,7 +13,8 @@
             --color-white: #ffffff;
             --color-accent-red: #E84D3A; /* Reddish-orange accent line */
             --color-button-blue: #005995;
-            --font-family: 'Arial', sans-serif; /* Using common system font */
+            --color-graphic-blue: #004B8C; /* Use header blue for the graphic */
+            --font-family: 'Arial', sans-serif;
         }
 
         /* --- Global Reset and Typography --- */
@@ -90,7 +91,7 @@
         /* --- Main Hero Content --- */
         .hero-section {
             padding: 60px 0 100px 0;
-            overflow: hidden; /* Important for containing the graphic */
+            overflow: hidden;
             position: relative;
         }
 
@@ -102,7 +103,7 @@
 
         .text-content {
             flex: 1;
-            max-width: 650px; /* Limit text width */
+            max-width: 650px;
             z-index: 10;
         }
 
@@ -159,47 +160,114 @@
         }
 
 
-        /* --- Unplugged Graphic (Simplified/Placeholder) --- */
+        /* --- Unplugged Graphic (CSS Shapes) --- */
         .graphic-container {
             position: absolute;
             right: 0;
-            top: 50px; /* Adjusted position to match image */
+            top: 50px;
             width: 450px;
             height: 80%;
             pointer-events: none;
             overflow: hidden;
             z-index: 1;
+            transform: scale(0.9);
+            transform-origin: top right;
         }
 
-        .graphic-container::before {
+        .plug-line {
+            position: absolute;
+            width: 150px;
+            height: 3px;
+            background: var(--color-graphic-blue);
+            opacity: 0.8;
+        }
+
+        /* Vertical Line */
+        .plug-line.vertical {
+            width: 3px;
+            height: 500px; /* Long line */
+            right: 150px;
+            top: 0;
+        }
+
+        /* Cable Tops */
+        .cable-end {
+            position: absolute;
+            width: 45px;
+            height: 60px;
+            border-radius: 4px;
+            background: var(--color-graphic-blue);
+            right: 125px;
+            opacity: 0.9;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        /* Top Plug (Socket) */
+        .cable-end.top {
+            top: 150px;
+        }
+        .cable-end.top::before {
             content: '';
             position: absolute;
-            width: 100%;
-            height: 100%;
-            /* 
-            In a production environment, this would be an SVG image. 
-            Here, we use a simple visual representation of the blue lines and disconnect.
-            */
-            background: linear-gradient(to bottom, transparent 0%, transparent 30%, var(--color-header-blue) 30%, var(--color-header-blue) 35%, transparent 35%, transparent 60%);
-            opacity: 0.15; /* Make the lines subtle */
+            width: 15px;
+            height: 15px;
+            background: var(--color-white);
+            border-radius: 50%;
+            top: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        /* Bottom Plug (Prongs) */
+        .cable-end.bottom {
+            top: 250px;
+        }
+        .cable-end.bottom::before,
+        .cable-end.bottom::after {
+            content: '';
+            position: absolute;
+            width: 8px;
+            height: 20px;
+            background: var(--color-graphic-blue);
+            top: -15px;
+            border-radius: 2px 2px 0 0;
+        }
+        .cable-end.bottom::before {
+            left: 8px;
+        }
+        .cable-end.bottom::after {
+            right: 8px;
         }
         
-        /* Note: For simplicity and since we cannot use complex SVG/image assets, 
-           the unplugged cord is represented by a large, illustrative block in this HTML.
-           If using Power Pages, this graphic should be uploaded as an SVG or image asset
-           and placed inside the .graphic-container div. */
-
-        .graphic-placeholder {
+        /* Spark/Disconnection Lines */
+        .spark {
             position: absolute;
-            top: 20%;
-            right: 10%;
-            width: 250px;
-            height: 250px;
-            background-color: transparent;
-            border: 2px solid var(--color-header-blue);
+            width: 10px;
+            height: 10px;
+            background: none;
+            border: 2px solid var(--color-graphic-blue);
             border-radius: 50%;
-            opacity: 0.1;
-            transform: rotate(45deg);
+            opacity: 0.5;
+            top: 190px;
+            right: 180px;
+            transform: scale(0.6);
+        }
+        .spark::before, .spark::after {
+            content: '';
+            position: absolute;
+            background: var(--color-graphic-blue);
+        }
+        .spark-left {
+            top: 220px;
+            right: 200px;
+        }
+        .spark-right {
+             top: 190px;
+            right: 90px;
+        }
+        .spark-top-left {
+            top: 160px;
+            right: 200px;
         }
 
 
@@ -212,7 +280,7 @@
 
         .footer-grid {
             display: grid;
-            grid-template-columns: 2fr 1fr 2fr; /* Col 1: Links, Col 2: Social, Col 3: Contact */
+            grid-template-columns: 2fr 1fr 2fr;
             gap: 40px;
         }
 
@@ -251,7 +319,7 @@
             font-weight: 700;
         }
 
-        /* Social Icons (Placeholder using text/emoji) */
+        /* Social Icons */
         .social-icons {
             display: flex;
             gap: 15px;
@@ -325,49 +393,44 @@
             .graphic-container {
                 position: relative;
                 width: 100%;
-                height: 200px;
+                height: 250px;
                 top: 0;
-                order: -1; /* Move graphic above text on small screens */
+                order: -1;
+                transform: scale(0.8);
+                transform-origin: center;
             }
-            .graphic-placeholder {
-                 top: 10%;
+            .plug-line.vertical {
+                height: 350px;
+                right: 50%;
+                transform: translateX(50%);
             }
+            .cable-end {
+                right: 50%;
+                transform: translateX(50%);
+            }
+            .cable-end.top { top: 50px; }
+            .cable-end.bottom { top: 130px; }
+            
+            .spark { display: none; } /* Hide complex sparks on small screens */
 
             .footer-grid {
                 grid-template-columns: 1fr 1fr;
                 gap: 30px;
             }
-            
-            /* Stack Social and Contact on smaller screens if necessary */
-            .footer-column:nth-child(2),
-            .footer-column:nth-child(3) {
-                 grid-column: span 1;
-            }
         }
 
         @media (max-width: 600px) {
-            h1 {
-                font-size: 2em;
-            }
-            h2 {
-                font-size: 1.5em;
-            }
-            
-            .logo-section {
-                gap: 10px;
+            .footer-grid {
+                grid-template-columns: 1fr;
             }
             .site-title {
-                display: none; /* Hide site title next to logo on very small screens */
+                display: none;
             }
-
-            .footer-grid {
-                grid-template-columns: 1fr; /* Stack all columns */
+            .graphic-container {
+                height: 180px;
             }
-
-            .legal-links a {
-                display: block;
-                margin: 5px 0;
-            }
+            .cable-end.top { top: 30px; }
+            .cable-end.bottom { top: 100px; }
         }
     </style>
 </head>
@@ -401,14 +464,23 @@
                     <p>En attendant, pour vos besoins de santé non urgents, nous vous recommandons de communiquer avec votre <strong><a href="#">clinique</a></strong>. Sinon, vous pouvez en tout temps appeler <strong>Info-Santé au 811</strong>, option 1 ou <strong>Info-Social au 811</strong>, option 2. En cas d'urgence, composez le 911.</p>
                 </div>
 
-                <a href="#" class="btn-primary">Aller sur Québec.ca</a>
+                <!-- Link Updated -->
+                <a href="https://www.quebec.ca/" class="btn-primary">Aller sur Québec.ca</a>
             </div>
 
-            <!-- Graphic Placeholder -->
-            <div class="graphic-container">
-                <!-- This div holds the visual space for the unplugged cord graphic -->
-                <!-- In production, replace the placeholder below with an actual SVG/Image -->
-                <div class="graphic-placeholder"></div> 
+            <!-- Graphic Container with CSS Plugs -->
+            <div class="graphic-container" aria-hidden="true">
+                <!-- Vertical Wire -->
+                <div class="plug-line vertical"></div>
+                <!-- Top Plug (Socket) -->
+                <div class="cable-end top"></div>
+                <!-- Bottom Plug (Prongs) -->
+                <div class="cable-end bottom"></div>
+                
+                <!-- Stylized Sparks/Disconnection indicators -->
+                <div class="spark spark-left"></div>
+                <div class="spark spark-right"></div>
+                <div class="spark spark-top-left"></div>
             </div>
 
         </div>
