@@ -15,6 +15,11 @@
             --color-button-blue: #005995;
             --color-graphic-blue: #004B8C; /* Use header blue for the graphic */
             --font-family: 'Arial', sans-serif;
+            
+            /* Graphic Variables for precise control */
+            --graphic-line-thickness: 2px;
+            --graphic-plug-width: 45px;
+            --graphic-line-offset-right: 150px; /* Position of the vertical line */
         }
 
         /* --- Global Reset and Typography --- */
@@ -84,9 +89,6 @@
             opacity: 0.8;
             transition: opacity 0.2s;
         }
-        .language-link a:hover {
-            opacity: 1;
-        }
 
         /* --- Main Hero Content --- */
         .hero-section {
@@ -127,22 +129,6 @@
             margin-bottom: 20px;
         }
 
-        .service-description {
-            margin-bottom: 30px;
-            max-width: 90%;
-        }
-
-        .instructions p {
-            margin-top: 0;
-        }
-        .instructions b {
-            font-weight: 700;
-        }
-        .instructions a {
-            color: var(--color-header-blue);
-            font-weight: bold;
-        }
-
         /* Primary Button */
         .btn-primary {
             display: inline-block;
@@ -160,7 +146,9 @@
         }
 
 
-        /* --- Unplugged Graphic (CSS Shapes) --- */
+        /* ---------------------------------------------------- */
+        /* --- Unplugged Graphic (TWEAKED FOR EXACT FIGMA MATCH) --- */
+        /* ---------------------------------------------------- */
         .graphic-container {
             position: absolute;
             right: 0;
@@ -170,108 +158,86 @@
             pointer-events: none;
             overflow: hidden;
             z-index: 1;
-            transform: scale(0.9);
-            transform-origin: top right;
         }
 
+        /* 1. The main vertical line */
         .plug-line {
             position: absolute;
-            width: 150px;
-            height: 3px;
+            width: var(--graphic-line-thickness);
+            height: 100%;
             background: var(--color-graphic-blue);
             opacity: 0.8;
+            right: var(--graphic-line-offset-right);
         }
 
-        /* Vertical Line */
-        .plug-line.vertical {
-            width: 3px;
-            height: 500px; /* Long line */
-            right: 150px;
-            top: 0;
-        }
-
-        /* Cable Tops */
+        /* 2. Cable Ends shared styles */
         .cable-end {
             position: absolute;
-            width: 45px;
-            height: 60px;
-            border-radius: 4px;
+            width: var(--graphic-plug-width);
             background: var(--color-graphic-blue);
-            right: 125px;
-            opacity: 0.9;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            right: calc(var(--graphic-line-offset-right) - (var(--graphic-plug-width) / 2));
+            opacity: 1;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
 
-        /* Top Plug (Socket) */
+        /* 2a. Top Plug (Socket) */
         .cable-end.top {
-            top: 150px;
+            top: 150px; 
+            height: 50px;
+            border-radius: 4px 4px 0 0;
         }
         .cable-end.top::before {
             content: '';
             position: absolute;
-            width: 15px;
-            height: 15px;
+            width: 10px;
+            height: 10px;
             background: var(--color-white);
             border-radius: 50%;
-            top: 15px;
+            top: 15px; 
             left: 50%;
             transform: translateX(-50%);
         }
 
-        /* Bottom Plug (Prongs) */
+        /* 2b. Bottom Plug (Prongs) */
         .cable-end.bottom {
-            top: 250px;
+            top: 230px; /* Precise gap from top plug */
+            height: 60px; 
+            border-radius: 0 0 4px 4px; 
         }
+        /* Prongs */
         .cable-end.bottom::before,
         .cable-end.bottom::after {
             content: '';
             position: absolute;
             width: 8px;
-            height: 20px;
+            height: 15px; /* Pronoun length */
             background: var(--color-graphic-blue);
-            top: -15px;
+            top: -15px; 
             border-radius: 2px 2px 0 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
-        .cable-end.bottom::before {
-            left: 8px;
-        }
-        .cable-end.bottom::after {
-            right: 8px;
-        }
-        
-        /* Spark/Disconnection Lines */
+        .cable-end.bottom::before { left: 10px; }
+        .cable-end.bottom::after { right: 10px; }
+
+        /* 3. Sparks/Disconnection Indicators (Rings) */
         .spark {
             position: absolute;
-            width: 10px;
-            height: 10px;
+            width: 6px; /* Smaller rings */
+            height: 6px;
             background: none;
-            border: 2px solid var(--color-graphic-blue);
+            border: 1px solid var(--color-graphic-blue);
             border-radius: 50%;
-            opacity: 0.5;
-            top: 190px;
-            right: 180px;
-            transform: scale(0.6);
-        }
-        .spark::before, .spark::after {
-            content: '';
-            position: absolute;
-            background: var(--color-graphic-blue);
-        }
-        .spark-left {
-            top: 220px;
-            right: 200px;
-        }
-        .spark-right {
-             top: 190px;
-            right: 90px;
-        }
-        .spark-top-left {
-            top: 160px;
-            right: 200px;
+            opacity: 0.7;
         }
 
+        /* Positioning the rings around the gap (180px - 230px) */
+        .spark-1 { top: 180px; right: 190px; }
+        .spark-2 { top: 200px; right: 185px; }
+        .spark-3 { top: 185px; right: 110px; }
+        .spark-4 { top: 215px; right: 100px; }
 
-        /* --- Footer Styling (Primary - Dark) --- */
+        /* --- Footer Styling --- */
         .footer-primary {
             background-color: var(--color-dark-footer);
             color: var(--color-white);
@@ -302,41 +268,7 @@
             font-size: 0.9em;
         }
 
-        .footer-column a {
-            opacity: 0.8;
-            transition: opacity 0.2s;
-        }
-        .footer-column a:hover {
-            opacity: 1;
-            text-decoration: underline;
-        }
-
-        .contact-info p {
-            margin: 5px 0;
-            font-size: 0.9em;
-        }
-        .contact-info b {
-            font-weight: 700;
-        }
-
-        /* Social Icons */
-        .social-icons {
-            display: flex;
-            gap: 15px;
-            font-size: 24px;
-            margin-top: 10px;
-        }
-
-        .social-icons a {
-            opacity: 0.8;
-            transition: transform 0.2s;
-        }
-        .social-icons a:hover {
-            transform: scale(1.1);
-            opacity: 1;
-        }
-
-        /* --- Footer Styling (Secondary - Legal) --- */
+        /* --- Footer Secondary (Legal) --- */
         .footer-secondary {
             background-color: var(--color-white);
             color: var(--color-text-dark);
@@ -345,18 +277,10 @@
             border-top: 1px solid #eee;
         }
 
-        .legal-links {
-            font-size: 0.8em;
-            margin-bottom: 15px;
-        }
-
         .legal-links a {
             margin: 0 10px;
             transition: color 0.2s;
             color: #666;
-        }
-        .legal-links a:hover {
-            color: var(--color-header-blue);
         }
 
         .footer-logo {
@@ -365,31 +289,10 @@
             margin-bottom: 10px;
             color: var(--color-header-blue);
         }
-        .footer-logo span {
-            /* Placeholder for the Québec grid logo - same as header */
-            display: inline-block;
-            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect x="0" y="0" width="40" height="40" fill="%23004B8C"/><rect x="60" y="0" width="40" height="40" fill="%23004B8C"/><rect x="0" y="60" width="40" height="40" fill="%23004B8C"/><rect x="60" y="60" width="40" height="40" fill="%23004B8C"/></svg>') no-repeat center;
-            background-size: contain;
-            width: 20px;
-            height: 20px;
-            margin-left: 5px;
-            vertical-align: middle;
-        }
-
-        .copyright {
-            font-size: 0.75em;
-            color: #666;
-        }
-
 
         /* --- Responsiveness (Tablet and Mobile) --- */
         @media (max-width: 992px) {
-            .hero-layout {
-                flex-direction: column;
-            }
-            .text-content {
-                max-width: 100%;
-            }
+            .hero-layout { flex-direction: column; }
             .graphic-container {
                 position: relative;
                 width: 100%;
@@ -399,17 +302,9 @@
                 transform: scale(0.8);
                 transform-origin: center;
             }
-            .plug-line.vertical {
-                height: 350px;
-                right: 50%;
-                transform: translateX(50%);
-            }
-            .cable-end {
-                right: 50%;
-                transform: translateX(50%);
-            }
-            .cable-end.top { top: 50px; }
-            .cable-end.bottom { top: 130px; }
+            /* Adjust graphic positioning for centering on smaller screens */
+            .plug-line { right: 50%; transform: translateX(50%); }
+            .cable-end { right: 50%; transform: translateX(50%); }
             
             .spark { display: none; } /* Hide complex sparks on small screens */
 
@@ -420,17 +315,8 @@
         }
 
         @media (max-width: 600px) {
-            .footer-grid {
-                grid-template-columns: 1fr;
-            }
-            .site-title {
-                display: none;
-            }
-            .graphic-container {
-                height: 180px;
-            }
-            .cable-end.top { top: 30px; }
-            .cable-end.bottom { top: 100px; }
+            .footer-grid { grid-template-columns: 1fr; }
+            .site-title { display: none; }
         }
     </style>
 </head>
@@ -464,23 +350,23 @@
                     <p>En attendant, pour vos besoins de santé non urgents, nous vous recommandons de communiquer avec votre <strong><a href="#">clinique</a></strong>. Sinon, vous pouvez en tout temps appeler <strong>Info-Santé au 811</strong>, option 1 ou <strong>Info-Social au 811</strong>, option 2. En cas d'urgence, composez le 911.</p>
                 </div>
 
-                <!-- Link Updated -->
                 <a href="https://www.quebec.ca/" class="btn-primary">Aller sur Québec.ca</a>
             </div>
 
-            <!-- Graphic Container with CSS Plugs -->
+            <!-- Graphic Container with CSS Plugs (Exact Figma Match) -->
             <div class="graphic-container" aria-hidden="true">
                 <!-- Vertical Wire -->
-                <div class="plug-line vertical"></div>
+                <div class="plug-line"></div>
                 <!-- Top Plug (Socket) -->
                 <div class="cable-end top"></div>
                 <!-- Bottom Plug (Prongs) -->
                 <div class="cable-end bottom"></div>
                 
                 <!-- Stylized Sparks/Disconnection indicators -->
-                <div class="spark spark-left"></div>
-                <div class="spark spark-right"></div>
-                <div class="spark spark-top-left"></div>
+                <div class="spark spark-1"></div>
+                <div class="spark spark-2"></div>
+                <div class="spark spark-3"></div>
+                <div class="spark spark-4"></div>
             </div>
 
         </div>
@@ -511,9 +397,7 @@
                     
                     <h3 style="margin-top: 30px;">Suivez-nous</h3>
                     <div class="social-icons">
-                        <!-- Butterfly/X logo placeholder -->
                         <a href="#" title="X/Twitter">🦋</a> 
-                        <!-- LinkedIn logo placeholder -->
                         <a href="#" title="LinkedIn">in</a> 
                     </div>
                 </div>
