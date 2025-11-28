@@ -1,59 +1,47 @@
 <!DOCTYPE html>
 <html lang="fr">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Votre Santé - Service indisponible</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <title>Service temporairement indisponible - Votre Santé</title>
     <style>
-        /* CSS Variables for Quebec Styling */
+        /* --- CSS Variables (Quebec Brand Colors) --- */
         :root {
-            --qc-blue-dark: #095797;
-            /* Primary Quebec Blue (Header, Button) */
-            --qc-blue-footer: #113350;
-            /* Dark Footer Background */
-            --qc-blue-text: #114470;
-            /* Darker blue for secondary text */
-            --qc-accent-red: #E05E50;
-            /* Accent color for title underline */
-            --qc-text-dark: #333333;
-            --qc-text-light: #FFFFFF;
-            --qc-border-gray: #C5CAD2;
-            /* Placeholder for link hover/subtle borders */
+            --color-header-blue: #004B8C; /* Deep blue for header */
+            --color-dark-footer: #213950; /* Dark blue for primary footer */
+            --color-text-dark: #333;
+            --color-white: #ffffff;
+            --color-accent-red: #E84D3A; /* Reddish-orange accent line */
+            --color-button-blue: #005995;
+            --font-family: 'Arial', sans-serif; /* Using common system font */
         }
 
-        /* Base Reset */
+        /* --- Global Reset and Typography --- */
         body {
-            font-family: Arial, Helvetica, sans-serif;
             margin: 0;
             padding: 0;
-            color: var(--qc-text-dark);
-            background-color: #f7f7f7;
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
+            font-family: var(--font-family);
+            color: var(--color-text-dark);
+            background-color: var(--color-white);
+            line-height: 1.6;
         }
 
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        /* --- Layout Utility Classes --- */
         .container {
-            max-width: 1140px;
+            max-width: 1200px;
             margin: 0 auto;
             padding: 0 20px;
         }
 
-        a {
-            color: var(--qc-blue-dark);
-            text-decoration: none;
-        }
-
-        a:hover {
-            text-decoration: underline;
-        }
-
-        /* --- Header Styles --- */
+        /* --- Header Styling --- */
         .site-header {
-            background-color: var(--qc-blue-dark);
-            color: var(--qc-text-light);
+            background-color: var(--color-header-blue);
+            color: var(--color-white);
             padding: 15px 0;
         }
 
@@ -63,359 +51,431 @@
             align-items: center;
         }
 
-        .header-left {
+        .logo-section {
             display: flex;
             align-items: center;
+            gap: 20px;
+        }
+
+        .logo-quebec {
+            font-size: 1.5em;
             font-weight: bold;
-            font-size: 1.1rem;
         }
 
-        .qc-logo {
-            /* Placeholder for the Quebec logo (4 squares) */
-            width: 30px;
-            height: 30px;
-            background-color: var(--qc-text-light);
-            margin-right: 10px;
-            border-radius: 4px;
-        }
-        
-        .logo-text {
-            display: flex;
-            align-items: baseline;
-            gap: 10px;
-        }
-        
-        .logo-text span:first-child {
-            font-size: 1.5rem;
-            font-weight: 700;
+        .logo-quebec span {
+            /* Placeholder for the Québec grid logo */
+            display: inline-block;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect x="0" y="0" width="40" height="40" fill="white"/><rect x="60" y="0" width="40" height="40" fill="white"/><rect x="0" y="60" width="40" height="40" fill="white"/><rect x="60" y="60" width="40" height="40" fill="white"/></svg>') no-repeat center;
+            background-size: contain;
+            width: 25px;
+            height: 25px;
+            margin-left: 5px;
+            vertical-align: middle;
         }
 
-        .lang-switch a {
-            color: var(--qc-text-light);
+        .site-title {
+            font-size: 1.1em;
+            font-weight: normal;
+        }
+
+        .language-link a {
+            font-size: 0.9em;
             opacity: 0.8;
-            font-size: 0.9rem;
+            transition: opacity 0.2s;
+        }
+        .language-link a:hover {
+            opacity: 1;
         }
 
-        /* --- Main Content Area --- */
-        main {
-            flex-grow: 1;
-            padding: 60px 0 80px 0;
-        }
-
-        .main-grid {
-            display: grid;
-            grid-template-columns: 2fr 1fr;
-            gap: 40px;
-            align-items: flex-start;
+        /* --- Main Hero Content --- */
+        .hero-section {
+            padding: 60px 0 100px 0;
+            overflow: hidden; /* Important for containing the graphic */
             position: relative;
         }
 
-        .content-left {
-            padding-right: 40px;
+        .hero-layout {
+            display: flex;
+            gap: 40px;
+            align-items: flex-start;
+        }
+
+        .text-content {
+            flex: 1;
+            max-width: 650px; /* Limit text width */
+            z-index: 10;
         }
 
         h1 {
-            font-size: 3rem;
-            line-height: 1.1;
-            margin-bottom: 20px;
-            color: var(--qc-text-dark);
+            font-size: 2.5em;
+            margin-bottom: 5px;
         }
 
-        .title-underline {
+        .accent-line {
             display: block;
             width: 50px;
             height: 4px;
-            background-color: var(--qc-accent-red);
-            margin-top: -10px;
-            margin-bottom: 30px;
+            background-color: var(--color-accent-red);
+            margin-bottom: 40px;
         }
 
         h2 {
-            font-size: 1.8rem;
-            font-weight: bold;
+            font-size: 1.7em;
+            font-weight: 700;
             margin-top: 0;
             margin-bottom: 20px;
         }
 
-        .unavailable-message {
-            font-size: 1.1rem;
-            line-height: 1.6;
+        .service-description {
             margin-bottom: 30px;
+            max-width: 90%;
         }
 
-        .unavailable-message p {
-            margin-bottom: 15px;
+        .instructions p {
+            margin-top: 0;
         }
-
-        .unavailable-message a {
-            color: var(--qc-blue-text);
+        .instructions b {
+            font-weight: 700;
+        }
+        .instructions a {
+            color: var(--color-header-blue);
             font-weight: bold;
         }
 
+        /* Primary Button */
         .btn-primary {
-            background-color: var(--qc-blue-dark);
-            color: var(--qc-text-light);
+            display: inline-block;
             padding: 12px 25px;
+            background-color: var(--color-button-blue);
+            color: var(--color-white);
             border: none;
             border-radius: 4px;
-            font-size: 1rem;
-            font-weight: bold;
-            cursor: pointer;
+            font-weight: 600;
+            margin-top: 20px;
             transition: background-color 0.2s;
         }
-
         .btn-primary:hover {
-            background-color: #0c69b2;
-            text-decoration: none;
+            background-color: #004576;
         }
 
-        /* Illustration Placeholder */
-        .illustration-right {
+
+        /* --- Unplugged Graphic (Simplified/Placeholder) --- */
+        .graphic-container {
             position: absolute;
-            top: 0;
             right: 0;
-            width: 300px; /* Adjust size based on design */
-            height: 400px;
+            top: 50px; /* Adjusted position to match image */
+            width: 450px;
+            height: 80%;
+            pointer-events: none;
             overflow: hidden;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            
+            z-index: 1;
         }
 
-        .illustration-placeholder {
+        .graphic-container::before {
+            content: '';
+            position: absolute;
             width: 100%;
             height: 100%;
-            /* This is a visual stand-in for the complex SVG graphic */
-            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 400"><rect fill="%23f7f7f7" width="300" height="400"/><text x="150" y="200" font-family="Arial" font-size="20" fill="%23095797" text-anchor="middle">Illustration: Plug Unplugged</text></svg>');
-            background-size: cover;
+            /* 
+            In a production environment, this would be an SVG image. 
+            Here, we use a simple visual representation of the blue lines and disconnect.
+            */
+            background: linear-gradient(to bottom, transparent 0%, transparent 30%, var(--color-header-blue) 30%, var(--color-header-blue) 35%, transparent 35%, transparent 60%);
+            opacity: 0.15; /* Make the lines subtle */
         }
         
-        /* --- Footer Styles (Dark) --- */
-        .site-footer-main {
-            background-color: var(--qc-blue-footer);
-            color: var(--qc-text-light);
+        /* Note: For simplicity and since we cannot use complex SVG/image assets, 
+           the unplugged cord is represented by a large, illustrative block in this HTML.
+           If using Power Pages, this graphic should be uploaded as an SVG or image asset
+           and placed inside the .graphic-container div. */
+
+        .graphic-placeholder {
+            position: absolute;
+            top: 20%;
+            right: 10%;
+            width: 250px;
+            height: 250px;
+            background-color: transparent;
+            border: 2px solid var(--color-header-blue);
+            border-radius: 50%;
+            opacity: 0.1;
+            transform: rotate(45deg);
+        }
+
+
+        /* --- Footer Styling (Primary - Dark) --- */
+        .footer-primary {
+            background-color: var(--color-dark-footer);
+            color: var(--color-white);
             padding: 50px 0;
         }
 
         .footer-grid {
-            display: flex;
-            justify-content: space-between;
+            display: grid;
+            grid-template-columns: 2fr 1fr 2fr; /* Col 1: Links, Col 2: Social, Col 3: Contact */
             gap: 40px;
         }
 
-        .footer-col {
-            min-width: 200px;
-        }
-
-        .footer-col h4 {
-            font-size: 1.1rem;
-            font-weight: bold;
+        .footer-column h3 {
+            font-size: 1.1em;
             margin-top: 0;
             margin-bottom: 20px;
+            font-weight: bold;
         }
 
-        .footer-col ul {
+        .footer-column ul {
             list-style: none;
             padding: 0;
             margin: 0;
         }
 
-        .footer-col li {
-            margin-bottom: 10px;
+        .footer-column ul li {
+            margin-bottom: 8px;
+            font-size: 0.9em;
         }
 
-        .footer-col a {
-            color: var(--qc-text-light);
-            font-size: 0.95rem;
+        .footer-column a {
             opacity: 0.8;
             transition: opacity 0.2s;
         }
-
-        .footer-col a:hover {
+        .footer-column a:hover {
             opacity: 1;
             text-decoration: underline;
         }
-        
-        .social-links {
+
+        .contact-info p {
+            margin: 5px 0;
+            font-size: 0.9em;
+        }
+        .contact-info b {
+            font-weight: 700;
+        }
+
+        /* Social Icons (Placeholder using text/emoji) */
+        .social-icons {
             display: flex;
             gap: 15px;
-            margin-top: 15px;
-            font-size: 1.5rem;
+            font-size: 24px;
+            margin-top: 10px;
         }
-        
-        .social-links a {
+
+        .social-icons a {
+            opacity: 0.8;
+            transition: transform 0.2s;
+        }
+        .social-icons a:hover {
+            transform: scale(1.1);
             opacity: 1;
         }
 
-        /* --- Footer Utility (Light) --- */
-        .site-footer-utility {
-            background-color: var(--qc-text-light);
-            border-top: 1px solid var(--qc-border-gray);
-            padding: 30px 0;
+        /* --- Footer Styling (Secondary - Legal) --- */
+        .footer-secondary {
+            background-color: var(--color-white);
+            color: var(--color-text-dark);
+            padding: 30px 0 40px 0;
             text-align: center;
-            font-size: 0.85rem;
+            border-top: 1px solid #eee;
         }
 
-        .utility-links {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            margin-bottom: 20px;
+        .legal-links {
+            font-size: 0.8em;
+            margin-bottom: 15px;
         }
 
-        .utility-links a {
-            color: var(--qc-text-dark);
+        .legal-links a {
+            margin: 0 10px;
+            transition: color 0.2s;
+            color: #666;
         }
-        
-        .qc-logo-utility {
-            width: 30px;
-            height: 30px;
-            background-color: var(--qc-blue-dark);
+        .legal-links a:hover {
+            color: var(--color-header-blue);
+        }
+
+        .footer-logo {
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: var(--color-header-blue);
+        }
+        .footer-logo span {
+            /* Placeholder for the Québec grid logo - same as header */
             display: inline-block;
-            margin-right: 5px;
-            border-radius: 4px;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect x="0" y="0" width="40" height="40" fill="%23004B8C"/><rect x="60" y="0" width="40" height="40" fill="%23004B8C"/><rect x="0" y="60" width="40" height="40" fill="%23004B8C"/><rect x="60" y="60" width="40" height="40" fill="%23004B8C"/></svg>') no-repeat center;
+            background-size: contain;
+            width: 20px;
+            height: 20px;
+            margin-left: 5px;
+            vertical-align: middle;
         }
 
-        /* Responsiveness */
-        @media (max-width: 900px) {
-            .main-grid {
-                grid-template-columns: 1fr;
-            }
-            .illustration-right {
-                position: static;
-                height: 250px;
-                width: 100%;
-                margin-top: 30px;
-            }
-            .footer-grid {
+        .copyright {
+            font-size: 0.75em;
+            color: #666;
+        }
+
+
+        /* --- Responsiveness (Tablet and Mobile) --- */
+        @media (max-width: 992px) {
+            .hero-layout {
                 flex-direction: column;
+            }
+            .text-content {
+                max-width: 100%;
+            }
+            .graphic-container {
+                position: relative;
+                width: 100%;
+                height: 200px;
+                top: 0;
+                order: -1; /* Move graphic above text on small screens */
+            }
+            .graphic-placeholder {
+                 top: 10%;
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr 1fr;
                 gap: 30px;
+            }
+            
+            /* Stack Social and Contact on smaller screens if necessary */
+            .footer-column:nth-child(2),
+            .footer-column:nth-child(3) {
+                 grid-column: span 1;
+            }
+        }
+
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 2em;
+            }
+            h2 {
+                font-size: 1.5em;
+            }
+            
+            .logo-section {
+                gap: 10px;
+            }
+            .site-title {
+                display: none; /* Hide site title next to logo on very small screens */
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr; /* Stack all columns */
+            }
+
+            .legal-links a {
+                display: block;
+                margin: 5px 0;
             }
         }
     </style>
 </head>
-
 <body>
 
-    <!-- Header Section -->
+    <!-- 1. Header -->
     <header class="site-header">
         <div class="container header-content">
-            <div class="header-left">
-                <div class="logo-text">
-                    <!-- Quebec logo is typically an SVG or image; using a placeholder -->
-                    <div class="qc-logo" aria-hidden="true"></div>
-                    <span>Québec</span>
-                </div>
-                <span>Votre Santé</span>
+            <div class="logo-section">
+                <div class="logo-quebec">Québec <span></span></div>
+                <div class="site-title">Votre Santé</div>
             </div>
-            <div class="lang-switch">
+            <div class="language-link">
                 <a href="#">English</a>
             </div>
         </div>
     </header>
 
-    <!-- Main Content/Maintenance Alert -->
-    <main>
-        <div class="container main-grid">
-            <div class="content-left">
-                <!-- Main Title -->
+    <!-- 2. Main Content (Hero) -->
+    <main class="hero-section">
+        <div class="container hero-layout">
+            
+            <div class="text-content">
                 <h1>Bienvenue à Votre Santé</h1>
-                <div class="title-underline"></div>
+                <span class="accent-line"></span>
 
-                <!-- Alert Message -->
                 <h2>Service temporairement indisponible</h2>
-                <div class="unavailable-message">
-                    <p>Le portail Votre Santé est en cours de maintenance et sera de retour plus tard.</p>
-                    <p>
-                        En attendant, pour vos besoins de santé non urgents, nous vous recommandons de communiquer avec
-                        votre <a href="#">clinique</a>. Sinon, vous pouvez en tout temps appeler
-                        <strong>Info-Santé au 811</strong>, option 1 ou
-                        <strong>Info-Social au 811</strong>, option 2. En cas d’urgence, composez le 911.
-                    </p>
+                <p class="service-description">Le portail Votre Santé est en cours de maintenance et sera de retour plus tard.</p>
+                
+                <div class="instructions">
+                    <p>En attendant, pour vos besoins de santé non urgents, nous vous recommandons de communiquer avec votre <strong><a href="#">clinique</a></strong>. Sinon, vous pouvez en tout temps appeler <strong>Info-Santé au 811</strong>, option 1 ou <strong>Info-Social au 811</strong>, option 2. En cas d'urgence, composez le 911.</p>
                 </div>
 
-                <!-- Call to Action -->
-                <a href="https://www.quebec.ca" class="btn-primary">
-                    Aller sur Québec.ca
-                </a>
+                <a href="#" class="btn-primary">Aller sur Québec.ca</a>
             </div>
 
-            <!-- Illustration Area -->
-            <div class="illustration-right">
-                <div class="illustration-placeholder" role="img"
-                    aria-label="Illustration montrant une prise électrique débranchée, symbolisant l'interruption de service.">
-                </div>
+            <!-- Graphic Placeholder -->
+            <div class="graphic-container">
+                <!-- This div holds the visual space for the unplugged cord graphic -->
+                <!-- In production, replace the placeholder below with an actual SVG/Image -->
+                <div class="graphic-placeholder"></div> 
             </div>
+
         </div>
     </main>
 
-    <!-- Main Footer (Dark Section) -->
-    <footer class="site-footer-main">
-        <div class="container footer-grid">
-            
-            <div class="footer-col">
-                <h4>Votre Santé</h4>
-                <ul>
-                    <li><a href="#">Carnet santé <i class="fa-solid fa-up-right-from-square"></i></a></li>
-                    <li><a href="#">Vaccination</a></li>
-                    <li><a href="#">Rendez-vous pris</a></li>
-                    <li><a href="#">J'ai un besoin de santé</a></li>
-                    <li><a href="#">Trouver une ressource <i class="fa-solid fa-up-right-from-square"></i></a></li>
-                    <li><a href="#">Foire aux questions</a></li>
-                </ul>
-            </div>
+    <!-- 3. Footer (Primary - Dark) -->
+    <footer class="footer-primary">
+        <div class="container">
+            <div class="footer-grid">
 
-            <div class="footer-col">
-                <h4>&nbsp;</h4>
-                <ul>
-                    <li><a href="#">Comment obtenir une consultation <i class="fa-solid fa-up-right-from-square"></i></a></li>
-                    <li><a href="#">Santé Québec <i class="fa-solid fa-up-right-from-square"></i></a></li>
-                </ul>
-                <h4 style="margin-top: 30px;">Suivez-nous</h4>
-                <div class="social-links">
-                    <!-- Placeholder icons for social media -->
-                    <a href="#" aria-label="Suivez-nous sur Twitter/X"><i class="fa-brands fa-twitter" style="color: #6C96C4;"></i></a>
-                    <a href="#" aria-label="Suivez-nous sur LinkedIn"><i class="fa-brands fa-linkedin" style="color: #6C96C4;"></i></a>
+                <div class="footer-column">
+                    <h3>Votre Santé</h3>
+                    <ul>
+                        <li><a href="#">Carnet santé <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg></a></li>
+                        <li><a href="#">Vaccination</a></li>
+                        <li><a href="#">Rendez-vous pris</a></li>
+                        <li><a href="#">J'ai un besoin de santé</a></li>
+                        <li><a href="#">Trouver une ressource <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg></a></li>
+                        <li><a href="#">Foire aux questions</a></li>
+                    </ul>
                 </div>
-            </div>
 
-            <div class="footer-col">
-                <h4>Nous joindre</h4>
-                <p style="font-size: 0.95rem; opacity: 0.8; line-height: 1.5;">
-                    Vous avez besoin d’aide avec la plateforme? Services Québec vous accompagne.
-                </p>
-                <p style="font-size: 0.95rem; opacity: 0.8; line-height: 1.5;">
-                    <strong>Par téléphone</strong> (sans frais) : 1 877 644-4545
-                </p>
-                <p style="font-size: 0.95rem;">
-                    En savoir plus : <a href="#">Visitez Services Québec <i class="fa-solid fa-up-right-from-square"></i></a>
-                </p>
+                <div class="footer-column">
+                    <h3>Comment obtenir une consultation</h3>
+                    <ul>
+                        <li><a href="#">Santé Québec <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg></a></li>
+                    </ul>
+                    
+                    <h3 style="margin-top: 30px;">Suivez-nous</h3>
+                    <div class="social-icons">
+                        <!-- Butterfly/X logo placeholder -->
+                        <a href="#" title="X/Twitter">🦋</a> 
+                        <!-- LinkedIn logo placeholder -->
+                        <a href="#" title="LinkedIn">in</a> 
+                    </div>
+                </div>
+
+                <div class="footer-column contact-info">
+                    <h3>Nous joindre</h3>
+                    <p>Vous avez besoin d'aide avec la plateforme?</p>
+                    <p>Services Québec vous accompagne.</p>
+                    <p><strong>Par téléphone</strong> (sans frais) : 1 877 644-4545</p>
+                    <p><strong>En savoir plus</strong> : Visitez Services Québec <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg></p>
+                </div>
+
             </div>
         </div>
     </footer>
 
-    <!-- Utility Footer (Light Section) -->
-    <footer class="site-footer-utility">
+    <!-- 4. Footer (Secondary - Legal) -->
+    <footer class="footer-secondary">
         <div class="container">
-            <div class="utility-links">
+            <div class="legal-links">
                 <a href="#">Accessibilité</a>
                 <a href="#">Politique de confidentialité</a>
-                <a href="#">Conditions d’utilisation</a>
-                <a href="#">Politique d’utilisation des témoins</a>
+                <a href="#">Conditions d'utilisation</a>
+                <a href="#">Politique d'utilisation des témoins</a>
                 <a href="#">Politique de limitation de responsabilité</a>
             </div>
-            <div>
-                <!-- Quebec logo placeholder -->
-                <div class="qc-logo-utility" aria-hidden="true"></div>
-                <span>Québec</span>
+            
+            <div class="footer-logo">Québec <span></span></div>
+            
+            <div class="copyright">
+                &copy; Gouvernement du Québec, 2025
             </div>
-            <p style="margin-top: 10px;">
-                © Gouvernement du Québec, 2025
-            </p>
         </div>
     </footer>
 
 </body>
-
 </html>
